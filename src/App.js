@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
 
+import './App.css';
+import { Pokemon } from './components/pokemon.jsx'
+const back = 'https://upload.wikimedia.org/wikipedia/vi/3/3b/Pokemon_Trading_Card_Game_cardback.jpg'
+const finish = 'https://media.istockphoto.com/illustrations/cartoon-finish-sign-illustration-id478290143'
+let pokemon_data = [
+  'https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png',
+  'https://assets.pokemon.com/assets/cms2/img/pokedex/full/002.png',
+  'https://assets.pokemon.com/assets/cms2/img/pokedex/full/003.png',
+  'https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png',
+  'https://assets.pokemon.com/assets/cms2/img/pokedex/full/005.png',
+  'https://assets.pokemon.com/assets/cms2/img/pokedex/full/006.png',
+  'https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png',
+  'https://assets.pokemon.com/assets/cms2/img/pokedex/full/008.png',
+]
+pokemon_data = [].concat(pokemon_data,pokemon_data)
+pokemon_data =pokemon_data.map(img =>{
+  return{
+    front : img,
+    back: back,
+    finish : finish,
+    isUp : false,
+    isFlip : 0,
+    isFinish : false
+
+  }
+})
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    Pokemon
   );
 }
 
