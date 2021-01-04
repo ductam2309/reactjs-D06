@@ -1,6 +1,6 @@
-
+import { Card } from './components/Card.jsx'
+import { Component } from 'react'
 import './App.css';
-import { Pokemon } from './components/pokemon.jsx'
 const back = 'https://upload.wikimedia.org/wikipedia/vi/3/3b/Pokemon_Trading_Card_Game_cardback.jpg'
 const finish = 'https://media.istockphoto.com/illustrations/cartoon-finish-sign-illustration-id478290143'
 let pokemon_data = [
@@ -14,21 +14,98 @@ let pokemon_data = [
   'https://assets.pokemon.com/assets/cms2/img/pokedex/full/008.png',
 ]
 pokemon_data = [].concat(pokemon_data,pokemon_data)
-pokemon_data =pokemon_data.map(img =>{
-  return{
-    front : img,
+pokemon_data = pokemon_data.map(img => {
+  return {
+    front: img,
     back: back,
-    finish : finish,
-    isUp : false,
-    isFlip : 0,
-    isFinish : false
-
+    finish: finish,
+    isUp: false,
+    isFlip: 0,
+    isFinish: false
   }
 })
-function App() {
-  return (
-    Pokemon
-  );
-}
+// console.log(pokemon_data)
 
-export default App;
+
+class App extends Component {
+  constructor(props) {
+    super(props)
+    pokemon_data.sort((a, b) => Math.random() - Math.random())
+    this.state = {
+      data: pokemon_data,
+      selected: []
+    }
+    this.select = this.select.bind(this)
+    this.flip = this.flip.bind(this)
+    this.check = this.check.bind(this)
+  }
+  check() {
+    let data = JSON.parse(JSON.stringify(this.state.data))
+    let selected = JSON.parse(JSON.stringify(this.state.selected))
+    let a = selected[0]
+    let b = selected[1]
+    // console.log(data[a],data[b])
+    setTimeout(() => {
+      if (data[a].front === data[b].front) {
+        data[a].isFinish = true
+        data[b].isFinish = true
+      } else {
+        data[a].isUp = false
+        data[b].isUp = false
+      }
+      this.setState({
+        data: data,
+        selected: []
+      })
+    }, 250)
+  }
+  componentDidUpdate() {
+    if (this.state.selected.length === 2) {
+      this.check()
+    }
+  }
+
+  select(indx) {
+    this.setState(oldState => {
+      let data = JSON.parse(JSON.stringify(oldState.data))
+      let selected = JSON.parse(JSON.stringify(oldState.selected))
+      if (!data[indx].isFinish) {
+        if (selected.indexOf(indx) === -1) {
+          selected.push(indx)
+        } else {
+          selected = []
+        }
+        data[indx].isUp = !data[indx].isUp
+
+        return {
+          ...oldState,
+          selected,
+          data
+        }
+      }
+    })
+  }
+  flip(indx, val) {
+    // console.log(`flip ${indx} ${val}`)
+    this.setState(oldState => {
+      let data = JSON.parse(JSON.stringify(oldState.data))
+      data[indx].isFlip = val
+      return {
+        data: data
+      }
+    })
+  }
+
+  render() {
+    return (
+      <div className="app-cont ">
+        {
+          this.state.data.map((link, indx) => {
+            return <Card {...link} indx={indx} key={indx} select={this.select} flip={this.flip} />
+          })
+        }
+      </div>
+    );
+  }
+}
+export default App
